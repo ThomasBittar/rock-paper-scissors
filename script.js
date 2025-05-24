@@ -1,3 +1,10 @@
+const rck=document.querySelector(".rock");
+const ppr=document.querySelector(".paper");
+const ssr=document.querySelector(".scissors");
+const results=document.querySelector(".results");
+let humanScore=0;
+let computerScore=0;
+
 console.log("Hey! Welcome to a new Rock-Paper-Scissors game!"); //Greeting the player
 
 //Random computer choice
@@ -20,33 +27,13 @@ function getComputerChoice(){
     }
 }
 
-//Human choice
-
-
-function getHumanChoice(){
-    let check=0;
-    let c=window.prompt("Type your choice : ROCK, PAPER, SCISSORS");
-    c=c.toUpperCase();
-    if(c=="ROCK"||c=="PAPER"||c=="SCISSORS"){
-        check=1;
-    }   //Check if the user gave a correct input
-    while(check==0){
-        c=window.prompt("Invalid input, please choose a word from the following list : ROCK, PAPER, SCISSORS");
-        c=c.toUpperCase();
-        if(c=="ROCK"||c=="PAPER"||c=="SCISSORS"){
-            check=1;
-        }   //Check if the user gave a correct input
-    }
-    return c;
-}
-
 
 //Comparing both choices
 
 
-function playRound(humanChoice,computerChoice){
+function playRound(humanChoice){
     let result=0;
-    console.log("You played "+humanChoice+" while computer played "+computerChoice);
+    let computerChoice=getComputerChoice();
     if(humanChoice=="ROCK"){
         switch(computerChoice){
             case "ROCK":
@@ -89,51 +76,40 @@ function playRound(humanChoice,computerChoice){
         }
 
     }
-    else{
-        console.log("You made a weird choice, the computer is confused now.");
+    switch(result){
+        case 0:
+            results.textContent="You played "+humanChoice+" while computer played "+computerChoice;
+            results.innerHTML+="<br>Nobody wins.<br>The current score is :<br>You : "+humanScore+"<br>Computer : "+computerScore;
+            break;
+        case 1:
+            computerScore++;
+            results.textContent="You played "+humanChoice+" while computer played "+computerChoice;
+            results.innerHTML+="<br>Computer wins.<br>The current score is :<br>You : "+humanScore+"<br>Computer : "+computerScore;
+            break;
+        case 2:
+            humanScore++;
+            results.textContent="You played "+humanChoice+" while computer played "+computerChoice;
+            results.innerHTML+="<br>Human wins.<br>The current score is :<br>You : "+humanScore+"<br>Computer : "+computerScore;
+            break;
     }
-    return result;
-}
-
-
-//Main
-
-
-function main(){
-    let humanScore=0;
-    let computerScore=0;
-    let cC=0;
-    let hC=0;
-    let max=3;
-    let result=4;
-    while (humanScore<max && computerScore<max){
-        cC=getComputerChoice();
-        hC=getHumanChoice();
-        result=playRound(hC,cC);
-        switch (result){
-            case 0:
-                console.log("You play "+hC+" while the computer plays "+cC+". None of you wins.");
-                console.log("Your current score is "+humanScore+" while the computer's is "+computerScore+".");
-                break;
-            case 1:
-                console.log("You play "+hC+" while the computer plays "+cC+". You lose :(");
-                computerScore++;
-                console.log("Your current score is "+humanScore+" while the computer's is "+computerScore+".");
-                break;
-            case 2:
-                console.log("You play "+hC+" while the computer plays "+cC+". You win! :D");
-                humanScore++;
-                console.log("Your current score is "+humanScore+" while the computer's is "+computerScore+".");
-                break;
-        }
+    if (humanScore>=5){
+            results.innerHTML+=" YOU WIN !!!!!";
+            rck.setAttribute("style","display: none;");
+            ppr.setAttribute("style","display: none;");
+            ssr.setAttribute("style","display: none;");
     }
-    if(humanScore==3){
-        console.log("YOU WIN!!!! HOORAY!!");
-    }
-    else if(computerScore==3){
-        console.log("YOU LOST!!!! HOW SAD!!");
+    else if(computerScore>=5){
+            results.innerHTML+=" YOU LOST !!!!!";
+            rck.setAttribute("style","display: none;");
+            ppr.setAttribute("style","display: none;");
+            ssr.setAttribute("style","display: none;");
     }
 }
 
 
-main();
+//Event listeners
+
+
+rck.addEventListener("click",() => playRound("ROCK"));
+ppr.addEventListener("click",() => playRound("PAPER"));
+ssr.addEventListener("click",() => playRound("SCISSORS"));
